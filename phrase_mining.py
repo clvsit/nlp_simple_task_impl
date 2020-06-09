@@ -10,11 +10,7 @@ class PhraseMining:
     def __init__(self, model_wv=None):
         self.model_wv = model_wv
     
-    def train(self, word_list: list, window: int = 5, size: int = 100, min_count: int = 10, sg: int = 0, negative: int = 5, workers: int = 5):
-        print("start training word2vec model...")
-        self.model_wv = Word2Vec(word_list, window=5, size=100, min_count=10, sg=0, negative=5, workers=5)
-    
-    def find(self, start_words: list, center_words: "ndarray" = None, neg_words: "ndarray" = None, min_sim: float = 0.6, max_sim: float = 1.0, alpha: float = 0.25) -> list:
+    def find(self, start_words: list, center_words: list = None, neg_words: list = None, min_sim: float = 0.6, max_sim: float = 1.0, alpha: float = 0.25) -> list:
         """
         根据启动的种子词去挖掘新词
         """
@@ -87,14 +83,17 @@ class PhraseMining:
 if __name__ == "__main__":
     data_word_list = []
 
+    # 读取数据
     with open("./data/content.json", "r", encoding="utf-8") as file:
         dataset = json.load(file)
 
+    # 进行分词
     for data in dataset:
         data_word_list.append(jieba.lcut(data))
-    
-    phrase_model = PhraseMining()
-    phrase_model.train(data_word_list)
+
+    model_wv = Word2Vec(data_word_list, window=5, size=100, min_count=10, sg=0, negative=5, workers=5)
+    phrase_model = PhraseMining(model_wv)
+    # 若没有 word2vec 模型，则进行训练
     print(phrase_model.find(["尾灯"], min_sim=0.7, alpha=0.5))
 
     # 存储 word2vec 模型
