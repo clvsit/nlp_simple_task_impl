@@ -84,7 +84,7 @@ if __name__ == "__main__":
     data_word_list = []
 
     # 读取数据
-    with open("./data/content.json", "r", encoding="utf-8") as file:
+    with open("content.json", "r", encoding="utf-8") as file:
         dataset = json.load(file)
 
     # 进行分词
