@@ -6,3 +6,4 @@
 - 使用说明：script/phrase_mining/README.md
 
 ## 基于 BK 树的候选集召回
+- 具体代码：script/bk_tree/bk_tree.py

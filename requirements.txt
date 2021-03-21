@@ -1,3 +1,4 @@
+tqdm
 jieba
 numpy
 gensim
