@@ -109,7 +109,8 @@ class BKTree:
         
         if dis == 0:
             for dis in range(left, right + 1):
-                self._traverse_and_get(node.branch[dis], result)
+                if dis in node.branch:
+                    self._traverse_and_get(node.branch[dis], result)                
             return None
 
         for dis_range in range(left, right + 1):
