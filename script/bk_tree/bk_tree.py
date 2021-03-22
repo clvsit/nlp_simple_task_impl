@@ -86,10 +86,10 @@ class BKTree:
         """
         result = []
 
-        self._traverse_and_get(query_word, max_dist, min_dist, self.root, result)
+        self._traverse_judge_and_get(query_word, max_dist, min_dist, self.root, result)
         return result
 
-    def _traverse_and_get(self, query_word: str, max_dist: int, min_dist: int, node: Node, result: list) -> None:
+    def _traverse_judge_and_get(self, query_word: str, max_dist: int, min_dist: int, node: Node, result: list) -> None:
         """
         具体实现函数：BK 树查询
         :param query_word: str  查询词语
@@ -105,11 +105,11 @@ class BKTree:
         dis = edit_distance(query_word, node.word)
 
         # 根据三角不等式来确定查询范围，以实现剪枝的目的
-        left, right = max(0, dis - max_dist), dis + max_dist
+        left, right = max(1, dis - max_dist), dis + max_dist
         
         if dis == 0:
             for dis in range(left, right + 1):
-                if dis in node.branch:
+                if dis in node.branch and min_dist <= dis <= max_dist:
                     self._traverse_and_get(node.branch[dis], result)                
             return None
 
@@ -122,7 +122,7 @@ class BKTree:
                     result.append(node.branch[dis_range].word)
 
                 # 继续沿着子节点遍历，直到叶子节点
-                self._traverse_and_get(query_word, max_dist, min_dist, node.branch[dis_range], result)
+                self._traverse_judge_and_get(query_word, max_dist, min_dist, node.branch[dis_range], result)
 
     def _traverse_and_get(self, node: Node, result: list) -> None:
         """
@@ -157,5 +157,5 @@ if __name__ == '__main__':
     word_list = ["game", "fame", "same", "gate", "gain", 'gay', "frame", "home", "aim", "acm", "ame", "fell", "fbcdg"]
     bk_tree = BKTree()
     bk_tree.build(word_list)
-    query_word = "fame"
+    query_word = "game"
     print(bk_tree.query(query_word, 2, min_dist=2))
