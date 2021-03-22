@@ -103,6 +103,11 @@ class BKTree:
 
         # 根据三角不等式来确定查询范围，以实现剪枝的目的
         left, right = max(0, dis - max_dist), dis + max_dist
+        
+        if dis == 0:
+            for dis in range(left, right + 1):
+                self._traverse_and_get(node.branch[dis], result)
+            return None
 
         for dis_range in range(left, right + 1):
             if dis_range in node.branch:
@@ -114,6 +119,21 @@ class BKTree:
 
                 # 继续沿着子节点遍历，直到叶子节点
                 self._traverse_and_get(query_word, max_dist, min_dist, node.branch[dis_range], result)
+
+    def _traverse_and_get(self, node: Node, result: list) -> None:
+        """
+        遍历 BK 树并获取遍历节点的词语
+        :param node:       Node 当前节点
+        :param result:     list 符合距离范围的词语列表
+        :return: None
+        """
+        if not node:
+            return None
+
+        result.append(node.word)
+
+        for dis, node_branch in node.branch.items():
+            self._traverse_and_get(node_branch, result)
 
     def traverse_and_print(self, node: Node):
         if not node:
