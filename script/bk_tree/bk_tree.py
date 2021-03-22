@@ -40,15 +40,18 @@ class BKTree:
         self.root = None
         self.word_list = []
 
-    def build(self, word_list: list) -> None:
+    def build(self, word_list: list or dict) -> None:
         """
         构建 BK 树
-        :param word_list: list 词语列表
+        :param word_list: list or dict 词语列表或者词频字典
         :return: None
         """
         if not word_list:
             return None
 
+        # 如果是词频字典形式，则将其按照词频降序排列，得到词语列表
+        if type(word_list) == dict:
+            word_list = [item[0] for item in sorted(word_list.items(), key=lambda x: x[1], reverse=True)]
         self.word_list = word_list
 
         # 首先，挑选第一个词语作为 BK 树的根结点
